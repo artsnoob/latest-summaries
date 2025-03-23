@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Summaries Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Latest Content Dashboard</h1>
+            <p id="last-updated">Last updated: <span id="update-time"></span></p>
+        </div>
+    </header>
+
+    <nav class="tab-nav">
+        <div class="container">
+            <ul class="tab-links">
+                <li><a href="#reddit" class="tab-link" data-target="reddit-section"><i class="fab fa-reddit"></i> Reddit</a></li>
+                <li><a href="#rss" class="tab-link" data-target="rss-section"><i class="fas fa-rss"></i> RSS</a></li>
+                <li><a href="#twitter" class="tab-link" data-target="twitter-section"><i class="fab fa-twitter"></i> Twitter</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <section id="reddit-section" class="content-section">
+                <div class="section-header">
+                    <h2><i class="fab fa-reddit"></i> Reddit Summaries</h2>
+                    <p class="date" id="reddit-date"></p>
+                </div>
+                <div id="reddit-content" class="cards-container"></div>
+            </section>
+
+            <section id="rss-section" class="content-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-rss"></i> RSS Feed Summaries</h2>
+                    <p class="date" id="rss-date"></p>
+                </div>
+                <div id="rss-content" class="cards-container"></div>
+            </section>
+
+            <section id="twitter-section" class="content-section">
+                <div class="section-header">
+                    <h2><i class="fab fa-twitter"></i> Twitter Summaries</h2>
+                    <p class="date" id="twitter-date"></p>
+                </div>
+                <div id="twitter-content" class="cards-container"></div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>Content Dashboard &copy; 2025</p>
+    </footer>
+
+    <script src="updated-app.js"></script>
+</body>
+</html>
