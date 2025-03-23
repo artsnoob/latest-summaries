@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const aiService = require('./ai-service');
 
 /**
  * Gets the most recent file from a directory based on its filename
@@ -85,8 +86,82 @@ if (require.main === module) {
     console.log(JSON.stringify(summaries, null, 2));
 }
 
+/**
+ * Generates an AI overview of all content
+ */
+async function generateAIOverview() {
+    const summaries = getLatestSummaries();
+    
+    // Generate AI overview using our AI service
+    try {
+        const overview = await aiService.generateOverview(summaries);
+        
+        // Add timestamp to the overview
+        const timestamp = new Date().toISOString();
+        const overviewWithTimestamp = `# AI-Generated Content Overview
+
+*Generated on ${timestamp}*
+
+${overview}`;
+        
+        // Save the overview to a file
+        const overviewDir = path.join(__dirname, 'overviews');
+        
+        // Create overviews directory if it doesn't exist
+        if (!fs.existsSync(overviewDir)) {
+            fs.mkdirSync(overviewDir);
+        }
+        
+        const overviewPath = path.join(overviewDir, `overview-${timestamp.replace(/[:.]/g, '-')}.md`);
+        fs.writeFileSync(overviewPath, overviewWithTimestamp, 'utf8');
+        
+        return {
+            content: overviewWithTimestamp,
+            timestamp: timestamp,
+            path: overviewPath
+        };
+    } catch (error) {
+        console.error('Error generating AI overview:', error);
+        throw error;
+    }
+}
+
+/**
+ * Gets the most recent AI overview
+ */
+function getLatestOverview() {
+    const overviewDir = path.join(__dirname, 'overviews');
+    
+    // Check if the overviews directory exists
+    if (!fs.existsSync(overviewDir)) {
+        return null;
+    }
+    
+    // Get all overview files
+    const files = fs.readdirSync(overviewDir)
+        .filter(file => file.startsWith('overview-') && file.endsWith('.md'))
+        .map(file => path.join(overviewDir, file))
+        .sort((a, b) => fs.statSync(b).mtime.getTime() - fs.statSync(a).mtime.getTime());
+    
+    // Return the most recent overview
+    if (files.length > 0) {
+        const content = getFileContent(files[0]);
+        if (content) {
+            return {
+                content: content,
+                path: files[0],
+                timestamp: fs.statSync(files[0]).mtime.toISOString()
+            };
+        }
+    }
+    
+    return null;
+}
+
 module.exports = {
     getLatestSummaries,
     getMostRecentFile,
-    getFileContent
+    getFileContent,
+    generateAIOverview,
+    getLatestOverview
 };
