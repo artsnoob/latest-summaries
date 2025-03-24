@@ -110,7 +110,7 @@
 
 .tab-link {
     display: block;
-    padding: 1rem 2rem;
+    padding: 1rem 1.5rem;
     color: #e0e0e0;
     text-decoration: none;
     font-weight: 500;
@@ -143,6 +143,10 @@
     color: #00BFFF;
 }
 
+.tab-link i.fa-th-large {
+    color: #9C27B0;
+}
+
 .ai-overview-link {
     margin-left: auto;
 }
@@ -171,6 +175,10 @@
 
 .tab-link[data-target="twitter-section"].active::after {
     background-color: #1DA1F2;
+}
+
+.tab-link[data-target="all-sections"].active::after {
+    background-color: #9C27B0;
 }
 
 
@@ -235,6 +243,8 @@ header h1 {
 
 .content-section.active {
     display: block; /* Show when active */
+    margin-bottom: 3rem; /* Better separation when all sections are showing */
+    padding-bottom: 0.5rem;
 }
 
 .section-header {

@@ -44,24 +44,32 @@ function setupTabNavigation() {
     
     // Function to activate a specific tab
     function activateTab(tabId) {
-        // Hide all content sections
-        contentSections.forEach(section => {
-            section.classList.remove('active');
-        });
+        // Handle the "All" option separately
+        if (tabId === 'all-sections') {
+            // Show all content sections
+            contentSections.forEach(section => {
+                section.classList.add('active');
+            });
+        } else {
+            // Hide all content sections
+            contentSections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Activate the selected content section
+            const targetSection = document.getElementById(tabId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+        }
         
         // Remove active class from all tabs
         tabLinks.forEach(link => {
             link.classList.remove('active');
         });
         
-        // Activate the selected tab and content
-        const targetSection = document.getElementById(tabId);
+        // Activate the selected tab
         const activeTab = document.querySelector(`.tab-link[data-target="${tabId}"]`);
-        
-        if (targetSection) {
-            targetSection.classList.add('active');
-        }
-        
         if (activeTab) {
             activeTab.classList.add('active');
         }
@@ -90,11 +98,8 @@ function setupTabNavigation() {
         }
     }
     
-    // Set the first tab as active by default if no hash in URL
-    if (tabLinks.length > 0) {
-        const firstTabTarget = tabLinks[0].getAttribute('data-target');
-        activateTab(firstTabTarget);
-    }
+    // Set 'All' tab as active by default if no hash in URL
+    activateTab('all-sections');
 }
 
 
