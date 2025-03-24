@@ -144,6 +144,9 @@
         }
 
         // Add the debug buttons when document is ready
+        // Declare generateNewOverview in the global scope
+        let generateNewOverview;
+        
         document.addEventListener('DOMContentLoaded', () => {
             // Add debug buttons after a small delay to ensure main script has run
             setTimeout(addDebugButtons, 100);
@@ -155,8 +158,19 @@
             const overviewTime = document.getElementById('overview-time');
             const btnGenerate = document.getElementById('btn-generate');
             
-            // Load the latest overview
-            loadLatestOverview();
+            // Check for the autoGenerate parameter in the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const shouldAutoGenerate = urlParams.get('autoGenerate') === 'true';
+            
+            // If autoGenerate is true, generate a new overview immediately
+            if (shouldAutoGenerate) {
+                generateNewOverview();
+                // Clean up the URL parameter
+                history.replaceState(null, '', 'overview.html');
+            } else {
+                // Otherwise, just load the latest overview
+                loadLatestOverview();
+            }
             
             // Handle generate button click
             btnGenerate.addEventListener('click', generateNewOverview);
@@ -191,12 +205,18 @@
                     overviewTime.textContent = timestamp;
                 } catch (error) {
                     console.error('Error loading overview:', error);
-                    overviewContent.innerHTML = `<p class="error">Failed to load overview: ${error.message}</p>`;
+                    // Show a more user-friendly error message with an option to generate
+                    overviewContent.innerHTML = `
+                        <div class="error">
+                            <p>Failed to load overview: ${error.message}</p>
+                            <button class="btn-primary" onclick="generateNewOverview()"><i class="fas fa-sync"></i> Generate New Overview</button>
+                        </div>
+                    `;
                 }
             }
             
             // Function to generate a new overview
-            async function generateNewOverview() {
+            generateNewOverview = async function() {
                 try {
                     // Disable the button and show loading state
                     btnGenerate.disabled = true;

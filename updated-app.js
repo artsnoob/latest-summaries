@@ -1,3 +1,42 @@
+// Function to directly generate AI overview
+async function generateAIOverview(event) {
+    event.preventDefault();
+    
+    // Create and show loading overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'loading-overlay';
+    overlay.innerHTML = `
+        <i class="fas fa-circle-notch fa-spin"></i>
+        <p>Generating AI Overview...</p>
+        <p class="small">This may take a minute</p>
+    `;
+    document.body.appendChild(overlay);
+    
+    try {
+        // Make API call to generate overview
+        const response = await fetch('/api/overview/generate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Failed to generate overview: ${response.status} ${response.statusText}`);
+        }
+        
+        // Once generation is complete, redirect to the overview page
+        window.location.href = 'overview.html';
+    } catch (error) {
+        console.error('Error generating overview:', error);
+        
+        // Remove loading overlay
+        document.body.removeChild(overlay);
+        
+        // Show error alert
+        alert(`Failed to generate AI overview: ${error.message}. Please try again later.`);
+    }
+}
 // Function to handle tab navigation
 function setupTabNavigation() {
     const tabLinks = document.querySelectorAll('.tab-link');
@@ -281,4 +320,19 @@ async function initApp() {
 }
 
 // Initialize the app when the DOM is loaded
-document.addEventListener('DOMContentLoaded', initApp);
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize the main app functionality
+    initApp();
+    
+    // Add event listeners for AI Overview generation buttons
+    const navAIOverviewBtn = document.getElementById('generate-ai-overview');
+    const footerAIOverviewBtn = document.getElementById('footer-generate-ai-overview');
+    
+    if (navAIOverviewBtn) {
+        navAIOverviewBtn.addEventListener('click', generateAIOverview);
+    }
+    
+    if (footerAIOverviewBtn) {
+        footerAIOverviewBtn.addEventListener('click', generateAIOverview);
+    }
+});
