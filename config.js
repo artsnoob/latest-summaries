@@ -7,7 +7,7 @@
 // Replace 'YOUR_GEMINI_API_KEY' with your actual API key from https://ai.google.dev/
 const config = {
     // Gemini API key
-    geminiApiKey: 'AIzaSyA0q9j3rX1eJKG2ua_IraYS-NJkYk_obGE',
+    geminiApiKey: 'xxx',
     
     // Paths to the latest files (automatically updated by the application)
     paths: {
