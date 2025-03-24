@@ -19,13 +19,6 @@
     <main>
         <div class="container">
             <div class="overview-container">
-                <div class="overview-header">
-                    <a href="index.html" class="btn-primary"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
-                    <button id="btn-generate" class="btn-primary">
-                        <i class="fas fa-sync"></i> Generate New Overview
-                    </button>
-                </div>
-                
                 <div id="overview-content" class="ai-summary">
                     <div class="loading">
                         <i class="fas fa-circle-notch"></i> Loading overview...
@@ -36,7 +29,7 @@
     </main>
 
     <footer>
-        <p>Content Dashboard &copy; 2025</p>
+        <p>Content Dashboard &copy; 2025 | <a href="index.html" class="subtle-link">Back to Dashboard</a></p>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
@@ -156,7 +149,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             const overviewContent = document.getElementById('overview-content');
             const overviewTime = document.getElementById('overview-time');
-            const btnGenerate = document.getElementById('btn-generate');
             
             // Check for the autoGenerate parameter in the URL
             const urlParams = new URLSearchParams(window.location.search);
@@ -171,9 +163,6 @@
                 // Otherwise, just load the latest overview
                 loadLatestOverview();
             }
-            
-            // Handle generate button click
-            btnGenerate.addEventListener('click', generateNewOverview);
             
             // Function to load the latest overview
             async function loadLatestOverview() {
@@ -205,11 +194,11 @@
                     overviewTime.textContent = timestamp;
                 } catch (error) {
                     console.error('Error loading overview:', error);
-                    // Show a more user-friendly error message with an option to generate
+                    // Show a more user-friendly error message
                     overviewContent.innerHTML = `
                         <div class="error">
                             <p>Failed to load overview: ${error.message}</p>
-                            <button class="btn-primary" onclick="generateNewOverview()"><i class="fas fa-sync"></i> Generate New Overview</button>
+                            <p>Please try refreshing the page.</p>
                         </div>
                     `;
                 }
@@ -218,10 +207,8 @@
             // Function to generate a new overview
             generateNewOverview = async function() {
                 try {
-                    // Disable the button and show loading state
-                    btnGenerate.disabled = true;
-                    btnGenerate.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Generating...';
-                    overviewContent.innerHTML = '<div class="loading"><i class="fas fa-circle-notch"></i> Generating new overview... This may take a minute.</div>';
+                    // Show loading state
+                    overviewContent.innerHTML = '<div class="loading"><i class="fas fa-circle-notch fa-spin"></i> Generating new overview... This may take a minute.</div>';
                     
                     logDebug('Generating new overview - request started');
                     
@@ -299,10 +286,6 @@
                         ${error.message}<br><br>
                         ${debugLink}
                     </div>`;
-                } finally {
-                    // Re-enable the button
-                    btnGenerate.disabled = false;
-                    btnGenerate.innerHTML = '<i class="fas fa-sync"></i> Generate New Overview';
                 }
             }
             

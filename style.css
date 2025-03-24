@@ -1,3 +1,13 @@
+.subtle-link {
+    color: #888;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.subtle-link:hover {
+    color: #ccc;
+    text-decoration: underline;
+}
 .loading-overlay .small {
     font-size: 0.9rem;
     color: #ccc;
