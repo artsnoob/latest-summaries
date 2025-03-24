@@ -59,36 +59,6 @@ function setupTabNavigation() {
 }
 
 
-// Function to add event listeners to all Read More buttons
-function addReadMoreListeners() {
-    document.querySelectorAll('.read-more-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const contentDiv = this.parentElement;
-            const fullContent = decodeURIComponent(contentDiv.getAttribute('data-full-content'));
-            const modal = document.createElement('div');
-            modal.className = 'content-modal';
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <span class="close-modal">&times;</span>
-                    <p>${fullContent}</p>
-                </div>
-            `;
-            document.body.appendChild(modal);
-            
-            // Add event listener to close button
-            modal.querySelector('.close-modal').addEventListener('click', function() {
-                document.body.removeChild(modal);
-            });
-            
-            // Also close when clicking outside the modal content
-            modal.addEventListener('click', function(event) {
-                if (event.target === modal) {
-                    document.body.removeChild(modal);
-                }
-            });
-        });
-    });
-}
 
 // Update the last updated time
 document.getElementById('update-time').textContent = new Date().toLocaleString();
@@ -193,13 +163,10 @@ function createRedditCards(posts) {
         card.className = 'card';
         
         const postContent = post.summary;
-        const isLongPost = postContent.length > 300; // Threshold for long posts
-        
         card.innerHTML = `
             <div class="card-header">${post.title}</div>
-            <div class="card-content" ${isLongPost ? 'data-full-content="' + encodeURIComponent(postContent) + '"' : ''}>
+            <div class="card-content">
                 <p>${postContent}</p>
-                ${isLongPost ? '<button class="read-more-btn">Read more</button>' : ''}
             </div>
             <div class="card-footer">
                 <span>r/${post.subreddit.replace('r/', '')}</span>
@@ -209,9 +176,6 @@ function createRedditCards(posts) {
         
         container.appendChild(card);
     });
-    
-    // Add event listeners to all "Read more" buttons
-    addReadMoreListeners();
 }
 
 // Function to create RSS cards
@@ -224,13 +188,11 @@ function createRSSCards(articles) {
         card.className = 'card';
         
         const articleContent = article.summary;
-        const isLongArticle = articleContent.length > 300; // Threshold for long articles
         
         card.innerHTML = `
             <div class="card-header">${article.title}</div>
-            <div class="card-content" ${isLongArticle ? 'data-full-content="' + encodeURIComponent(articleContent) + '"' : ''}>
+            <div class="card-content">
                 <p>${articleContent}</p>
-                ${isLongArticle ? '<button class="read-more-btn">Read more</button>' : ''}
             </div>
             <div class="card-footer">
                 <span>${article.feed}</span>
@@ -240,9 +202,6 @@ function createRSSCards(articles) {
         
         container.appendChild(card);
     });
-    
-    // Add event listeners to all "Read more" buttons
-    addReadMoreListeners();
 }
 
 // Function to create Twitter cards
@@ -254,15 +213,12 @@ function createTwitterCards(tweets) {
         const card = document.createElement('div');
         card.className = 'card';
         
-        // Process tweet content to add a read more button if it's too long
         const tweetContent = tweet.content;
-        const isLongTweet = tweetContent.length > 400; // Threshold for long tweets
         
         card.innerHTML = `
             <div class="card-header">@${tweet.username}</div>
-            <div class="card-content" ${isLongTweet ? 'data-full-content="' + encodeURIComponent(tweetContent) + '"' : ''}>
+            <div class="card-content">
                 <p>${tweetContent}</p>
-                ${isLongTweet ? '<button class="read-more-btn">Read more</button>' : ''}
             </div>
             <div class="card-footer">
                 <span>${tweet.date}</span>
@@ -272,9 +228,6 @@ function createTwitterCards(tweets) {
         
         container.appendChild(card);
     });
-    
-    // Add event listeners to all "Read more" buttons
-    addReadMoreListeners();
 }
 
 // Function to fetch all summaries from the API
